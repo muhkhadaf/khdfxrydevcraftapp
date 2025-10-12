@@ -224,30 +224,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Demo Credentials */}
-          <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <h3 className="text-sm font-medium text-blue-800 dark:text-blue-400 mb-2">
-              Demo Credentials:
-            </h3>
-            <p className="text-sm text-blue-600 dark:text-blue-300">
-              Username: <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">admin</code><br />
-              Password: <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">admin123</code>
-            </p>
-          </div>
-
-          {/* Registration Link */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Belum punya akun?{' '}
-              <Link
-                href="/register"
-                className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
-              >
-                Daftar sekarang
-              </Link>
-            </p>
-          </div>
         </div>
 
         {/* Footer */}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Package, Calendar, User, DollarSign, Clock, CheckCircle, AlertCircle, XCircle } from 'lucide-react'
+import { Search, Package, Calendar, User, DollarSign, Clock, CheckCircle, AlertCircle, XCircle, Code } from 'lucide-react'
 import { Job, getStatusColor, getPriorityColor, JOB_STATUSES, JOB_PRIORITIES } from '@/lib/supabase-client'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 
@@ -92,9 +92,11 @@ export default function TrackingPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-14 sm:h-16">
             <div className="flex items-center gap-2 sm:gap-3">
-              <Package className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
-                Job Tracker
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <Code className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
+              </div>
+              <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                khdfxryd devcraft
               </h1>
             </div>
             <ThemeToggle />

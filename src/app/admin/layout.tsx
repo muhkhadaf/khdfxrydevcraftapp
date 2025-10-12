@@ -12,7 +12,9 @@ import {
   LogOut, 
   Menu, 
   X,
-  User
+  User,
+  Users,
+  Code
 } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import toast from 'react-hot-toast'
@@ -56,6 +58,12 @@ export default function AdminLayout({
       href: '/admin/jobs/create',
       icon: Plus,
       current: pathname === '/admin/jobs/create'
+    },
+    {
+      name: 'Kelola Pengguna',
+      href: '/admin/users',
+      icon: Users,
+      current: pathname === '/admin/users' || pathname === '/admin/users/create'
     },
     {
       name: 'Tracking Publik',
@@ -135,9 +143,14 @@ export default function AdminLayout({
       }`}>
         {/* Sidebar header */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-700">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-            JobTracker Pro
-          </h1>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Code className="w-5 h-5 text-white" />
+            </div>
+            <h1 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              khdfxryd devcraft
+            </h1>
+          </div>
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
