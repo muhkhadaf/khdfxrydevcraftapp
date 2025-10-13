@@ -14,7 +14,8 @@ import {
   X,
   User,
   Users,
-  Code
+  Code,
+  FileText
 } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import toast from 'react-hot-toast'
@@ -66,10 +67,22 @@ export default function AdminLayout({
       current: pathname === '/admin/users' || pathname === '/admin/users/create'
     },
     {
+      name: 'Invoice & Receipt',
+      href: '/admin/documents',
+      icon: FileText,
+      current: pathname.startsWith('/admin/documents')
+    },
+    {
       name: 'Tracking Publik',
       href: '/tracking',
       icon: Search,
       current: pathname === '/tracking'
+    },
+    {
+      name: 'Pengaturan Perusahaan',
+      href: '/admin/company-settings',
+      icon: Settings,
+      current: pathname === '/admin/company-settings'
     }
   ]
 
