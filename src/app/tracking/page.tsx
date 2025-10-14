@@ -96,7 +96,7 @@ export default function TrackingPage() {
                 <Code className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
               </div>
               <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                khdfxryd devcraft
+                KhadevraX
               </h1>
             </div>
             <ThemeToggle />

@@ -336,7 +336,7 @@ export default function CompanySettingsPage() {
                     value={settings.company_name}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="khdfxryd devcraft"
+                    placeholder=""
                   />
                 </div>
                 <div>
