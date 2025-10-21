@@ -15,7 +15,8 @@ import {
   User,
   Users,
   Code,
-  FileText
+  FileText,
+  CheckSquare
 } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import toast from 'react-hot-toast'
@@ -65,6 +66,12 @@ export default function AdminLayout({
       href: '/admin/users',
       icon: Users,
       current: pathname === '/admin/users' || pathname === '/admin/users/create'
+    },
+    {
+      name: 'To-Do List Harian',
+      href: '/admin/todos',
+      icon: CheckSquare,
+      current: pathname.startsWith('/admin/todos')
     },
     {
       name: 'Invoice & Receipt',
