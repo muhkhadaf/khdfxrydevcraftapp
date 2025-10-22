@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Save, FileText, Receipt, Download, Eye, CreditCard, Banknote, Wallet } from 'lucide-react'
+import { ArrowLeft, Save, FileText, Receipt, Download, Eye, CreditCard, Banknote, Wallet, Image } from 'lucide-react'
 import toast from 'react-hot-toast'
 import DocumentPDF from '@/components/documents/DocumentPDF'
 import { usePDFExport } from '@/hooks/usePDFExport'
@@ -97,7 +97,7 @@ export default function CreateDocumentPage() {
   const searchParams = useSearchParams()
   const jobIdParam = searchParams.get('job_id')
   const pdfRef = useRef<HTMLDivElement>(null)
-  const { exportToPDF } = usePDFExport()
+  const { exportToPDF, exportToPNG } = usePDFExport()
 
   // Fetch jobs and company settings
   useEffect(() => {
@@ -336,6 +336,35 @@ export default function CreateDocumentPage() {
     } catch (error) {
       console.error('Error exporting PDF:', error)
       toast.error('Gagal mengekspor PDF')
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  // Download PNG
+  const downloadPNG = async () => {
+    if (!selectedJob || !formData.amount) {
+      toast.error('Pilih proyek dan isi jumlah terlebih dahulu')
+      return
+    }
+
+    if (!pdfRef.current) {
+      toast.error('Dokumen tidak dapat diekspor')
+      return
+    }
+
+    setIsExporting(true)
+
+    try {
+      const filename = `${formData.type}-${selectedJob.tracking_id}-${Date.now()}.png`
+      await exportToPNG(pdfRef.current, {
+        filename,
+        quality: 1.0
+      })
+      toast.success('PNG berhasil diunduh!')
+    } catch (error) {
+      console.error('Error exporting PNG:', error)
+      toast.error('Gagal mengekspor PNG')
     } finally {
       setIsExporting(false)
     }
@@ -797,9 +826,21 @@ export default function CreateDocumentPage() {
                 >
                   Tutup
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors">
+                <button 
+                  onClick={downloadPDF}
+                  disabled={isExporting}
+                  className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-4 py-2 rounded-lg transition-colors"
+                >
                   <Download className="w-4 h-4" />
-                  Download PDF
+                  {isExporting ? 'Mengunduh...' : 'Download PDF'}
+                </button>
+                <button 
+                  onClick={downloadPNG}
+                  disabled={isExporting}
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  <Image className="w-4 h-4" />
+                  {isExporting ? 'Mengunduh...' : 'Download PNG'}
                 </button>
               </div>
             </div>

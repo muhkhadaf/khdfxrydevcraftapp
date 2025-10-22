@@ -281,24 +281,25 @@ export default function TodosPage() {
 
       {/* Date Navigation */}
       <div className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <button
             onClick={goToPreviousDay}
-            className="flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors w-full sm:w-auto justify-center sm:justify-start"
           >
             <ChevronLeft className="w-4 h-4" />
-            Hari Sebelumnya
+            <span className="hidden sm:inline">Hari Sebelumnya</span>
+            <span className="sm:hidden">Sebelumnya</span>
           </button>
           
-          <div className="text-center">
-            <h2 className={`text-xl font-semibold ${
+          <div className="text-center flex-1 order-first sm:order-none">
+            <h2 className={`text-lg sm:text-xl font-semibold ${
               getDateStatus(selectedDate) === 'today' ? 'text-blue-600 dark:text-blue-400' :
               getDateStatus(selectedDate) === 'past' ? 'text-gray-500 dark:text-gray-400' :
               'text-green-600 dark:text-green-400'
             }`}>
               {format(selectedDate, 'EEEE, dd MMMM yyyy', { locale: id })}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
               {getDateStatus(selectedDate) === 'today' && 'Hari Ini'}
               {getDateStatus(selectedDate) === 'past' && 'Hari yang Sudah Berlalu'}
               {getDateStatus(selectedDate) === 'future' && 'Hari yang Akan Datang'}
@@ -307,9 +308,10 @@ export default function TodosPage() {
           
           <button
             onClick={goToNextDay}
-            className="flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors w-full sm:w-auto justify-center sm:justify-start"
           >
-            Hari Berikutnya
+            <span className="hidden sm:inline">Hari Berikutnya</span>
+            <span className="sm:hidden">Berikutnya</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -318,7 +320,7 @@ export default function TodosPage() {
           <div className="text-center mt-4">
             <button
               onClick={goToToday}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors text-sm sm:text-base"
             >
               Kembali ke Hari Ini
             </button>
@@ -329,7 +331,7 @@ export default function TodosPage() {
       {/* Controls */}
       <div className="mb-6 space-y-4">
         {/* Search and Add Button */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
@@ -342,21 +344,22 @@ export default function TodosPage() {
           </div>
           <button
             onClick={() => setShowAddForm(true)}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+            className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            Tambah Pekerjaan
+            <span className="hidden sm:inline">Tambah Pekerjaan</span>
+            <span className="sm:hidden">Tambah</span>
           </button>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-gray-500" />
+            <Filter className="w-4 h-4 text-gray-500 flex-shrink-0" />
             <select
               value={filterCompleted}
               onChange={(e) => setFilterCompleted(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
             >
               <option value="all">Semua Status</option>
               <option value="pending">Belum Selesai</option>
@@ -364,10 +367,11 @@ export default function TodosPage() {
             </select>
           </div>
           <div className="flex items-center gap-2">
+            <div className="w-4 h-4 flex-shrink-0"></div>
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
             >
               <option value="all">Semua Prioritas</option>
               <option value="high">Prioritas Tinggi</option>
@@ -498,7 +502,7 @@ export default function TodosPage() {
               <div className="flex items-start gap-3">
                 <button
                   onClick={() => toggleCompletion(todo)}
-                  className="mt-1 text-blue-600 hover:text-blue-700 transition-colors"
+                  className="mt-1 text-blue-600 hover:text-blue-700 transition-colors flex-shrink-0"
                 >
                   {todo.completed ? (
                     <CheckCircle className="w-5 h-5" />
@@ -509,8 +513,8 @@ export default function TodosPage() {
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1">
-                      <h3 className={`font-medium ${
+                    <div className="flex-1 min-w-0">
+                      <h3 className={`font-medium break-words ${
                         todo.completed 
                           ? 'line-through text-gray-500 dark:text-gray-400' 
                           : 'text-gray-900 dark:text-white'
@@ -533,19 +537,21 @@ export default function TodosPage() {
                       )}
                     </div>
                     
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getPriorityColor(todo.priority)}`}>
+                    <div className="flex items-center gap-2 flex-shrink-0 self-start">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full border whitespace-nowrap ${getPriorityColor(todo.priority)}`}>
                         {getPriorityText(todo.priority)}
                       </span>
                       <button
                         onClick={() => startEdit(todo)}
-                        className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                        className="p-1 text-gray-400 hover:text-blue-600 transition-colors flex-shrink-0"
+                        title="Edit"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => deleteTodo(todo.id)}
-                        className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                        className="p-1 text-gray-400 hover:text-red-600 transition-colors flex-shrink-0"
+                        title="Hapus"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -555,7 +561,7 @@ export default function TodosPage() {
                   <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
                     {todo.due_date && (
                       <div className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
+                        <Calendar className="w-3 h-3 flex-shrink-0" />
                         <span>Target: {formatDate(todo.due_date)}</span>
                       </div>
                     )}

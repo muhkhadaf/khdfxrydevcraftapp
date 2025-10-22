@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Download, Eye, FileText, Receipt } from 'lucide-react'
+import { ArrowLeft, Download, Eye, FileText, Receipt, Image } from 'lucide-react'
 import toast from 'react-hot-toast'
 import DocumentPDF from '@/components/documents/DocumentPDF'
 import { usePDFExport } from '@/hooks/usePDFExport'
@@ -66,7 +66,7 @@ export default function ViewDocumentPage() {
   const [loading, setLoading] = useState(true)
   const [isExporting, setIsExporting] = useState(false)
   const pdfRef = useRef<HTMLDivElement>(null)
-  const { exportToPDF } = usePDFExport()
+  const { exportToPDF, exportToPNG } = usePDFExport()
 
   const documentId = params.id as string
 
@@ -119,6 +119,24 @@ export default function ViewDocumentPage() {
     } catch (error) {
       console.error('Error exporting PDF:', error)
       toast.error('Gagal mengunduh PDF')
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleDownloadPNG = async () => {
+    if (!document || !pdfRef.current) return
+
+    try {
+      setIsExporting(true)
+      await exportToPNG(pdfRef.current, {
+        filename: `${document.document_number}.png`,
+        quality: 1.0
+      })
+      toast.success('PNG berhasil diunduh!')
+    } catch (error) {
+      console.error('Error exporting PNG:', error)
+      toast.error('Gagal mengunduh PNG')
     } finally {
       setIsExporting(false)
     }
@@ -194,6 +212,14 @@ export default function ViewDocumentPage() {
           >
             <Download className="w-4 h-4" />
             {isExporting ? 'Mengunduh...' : 'Download PDF'}
+          </button>
+          <button
+            onClick={handleDownloadPNG}
+            disabled={isExporting}
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <Image className="w-4 h-4" />
+            {isExporting ? 'Mengunduh...' : 'Download PNG'}
           </button>
         </div>
       </div>

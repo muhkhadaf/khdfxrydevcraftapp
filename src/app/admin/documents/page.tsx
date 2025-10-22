@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Plus, FileText, Receipt, Search, Calendar, DollarSign, Filter, Eye, Download, Trash2 } from 'lucide-react'
+import { Plus, FileText, Receipt, Search, Calendar, DollarSign, Filter, Eye, Download, Trash2, ChevronDown, Image } from 'lucide-react'
 import toast from 'react-hot-toast'
 import DatabaseSetupNotice from '@/components/documents/DatabaseSetupNotice'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
@@ -47,6 +47,7 @@ export default function DocumentsPage() {
   const [filterStatus, setFilterStatus] = useState('')
   const [filterType, setFilterType] = useState('')
   const [tableExists, setTableExists] = useState(true)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean
     document: Document | null
@@ -83,6 +84,20 @@ export default function DocumentsPage() {
       // Fallback: redirect to view page
       window.open(`/admin/documents/view/${doc.id}`, '_blank')
       toast.success('Membuka halaman dokumen', { id: 'download' })
+    }
+  }
+
+  // Handle download document as PNG
+  const handleDownloadPNG = async (doc: Document) => {
+    try {
+      toast.loading('Mengunduh dokumen PNG...', { id: 'download-png' })
+      
+      // Redirect to view page for PNG download
+      window.open(`/admin/documents/view/${doc.id}?format=png`, '_blank')
+      toast.success('Membuka halaman dokumen untuk download PNG', { id: 'download-png' })
+    } catch (error) {
+      console.error('Error downloading PNG:', error)
+      toast.error('Gagal mengunduh dokumen PNG', { id: 'download-png' })
     }
   }
 
@@ -168,6 +183,20 @@ export default function DocumentsPage() {
 
     fetchData()
   }, [])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (openDropdown) {
+        setOpenDropdown(null)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [openDropdown])
 
   // Filter jobs based on search term
   const filteredJobs = jobs.filter(job =>
@@ -487,13 +516,44 @@ export default function DocumentsPage() {
                           <Eye className="w-4 h-4" />
                           Lihat
                         </Link>
-                        <button
-                          onClick={() => handleDownloadDocument(doc)}
-                          className="inline-flex items-center gap-1 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
-                        >
-                          <Download className="w-4 h-4" />
-                          Download
-                        </button>
+                        
+                        {/* Download Dropdown */}
+                        <div className="relative">
+                          <button
+                            onClick={() => setOpenDropdown(openDropdown === doc.id ? null : doc.id)}
+                            className="inline-flex items-center gap-1 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                          >
+                            <Download className="w-4 h-4" />
+                            Download
+                            <ChevronDown className="w-3 h-3" />
+                          </button>
+                          
+                          {openDropdown === doc.id && (
+                            <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10">
+                              <button
+                                onClick={() => {
+                                  handleDownloadDocument(doc)
+                                  setOpenDropdown(null)
+                                }}
+                                className="w-full px-3 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                              >
+                                <Download className="w-3 h-3" />
+                                PDF
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleDownloadPNG(doc)
+                                  setOpenDropdown(null)
+                                }}
+                                className="w-full px-3 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                              >
+                                <Image className="w-3 h-3" />
+                                PNG
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        
                         <button
                           onClick={() => handleDeleteDocument(doc)}
                           className="inline-flex items-center gap-1 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"

@@ -4,12 +4,16 @@ import { useCallback } from 'react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 
-interface PDFExportOptions {
+interface ExportOptions {
   filename?: string
   quality?: number
   format?: 'a4' | 'letter'
   orientation?: 'portrait' | 'landscape'
+  exportType?: 'pdf' | 'png'
 }
+
+// Backward compatibility
+interface PDFExportOptions extends ExportOptions {}
 
 export const usePDFExport = () => {
   const exportToPDF = useCallback(async (
@@ -20,7 +24,8 @@ export const usePDFExport = () => {
       filename = 'document.pdf',
       quality = 1.0,
       format = 'a4',
-      orientation = 'portrait'
+      orientation = 'portrait',
+      exportType = 'pdf'
     } = options
 
     try {
@@ -41,6 +46,24 @@ export const usePDFExport = () => {
         windowHeight: element.scrollHeight
       })
 
+      if (exportType === 'png') {
+        // Export as PNG
+        const imgData = canvas.toDataURL('image/png', quality)
+        
+        // Create download link
+        const link = document.createElement('a')
+        link.download = filename.replace(/\.pdf$/, '.png')
+        link.href = imgData
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        
+        // Restore cursor
+        document.body.style.cursor = originalCursor
+        return true
+      }
+
+      // Export as PDF (existing logic)
       // Calculate PDF dimensions
       const imgWidth = format === 'a4' ? 210 : 216 // mm
       const imgHeight = format === 'a4' ? 297 : 279 // mm
@@ -76,11 +99,19 @@ export const usePDFExport = () => {
 
       return true
     } catch (error) {
-      console.error('Error generating PDF:', error)
+      console.error('Error generating export:', error)
       document.body.style.cursor = 'default'
-      throw new Error('Failed to generate PDF')
+      throw new Error(`Failed to generate ${exportType.toUpperCase()}`)
     }
   }, [])
+
+  // New function for PNG export
+  const exportToPNG = useCallback(async (
+    element: HTMLElement,
+    options: ExportOptions = {}
+  ) => {
+    return exportToPDF(element, { ...options, exportType: 'png' })
+  }, [exportToPDF])
 
   const exportElementToPDF = useCallback(async (
     elementId: string,
@@ -94,9 +125,23 @@ export const usePDFExport = () => {
     return exportToPDF(element, options)
   }, [exportToPDF])
 
+  const exportElementToPNG = useCallback(async (
+    elementId: string,
+    options: ExportOptions = {}
+  ) => {
+    const element = document.getElementById(elementId)
+    if (!element) {
+      throw new Error(`Element with ID "${elementId}" not found`)
+    }
+
+    return exportToPNG(element, options)
+  }, [exportToPNG])
+
   return {
     exportToPDF,
-    exportElementToPDF
+    exportToPNG,
+    exportElementToPDF,
+    exportElementToPNG
   }
 }
 
